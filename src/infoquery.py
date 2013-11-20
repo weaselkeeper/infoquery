@@ -37,6 +37,7 @@ log.debug("Starting logging")
 
 def run():
     """ Main loop, called via .run method, or via __main__ section """
+    hosts_and_ips = {}
     args = get_options()
     conn = _get_server(args)
 
@@ -48,7 +49,7 @@ def run():
         try:
             conn.request('GET', '/wapi/v1.0/record:host', 'name~=%s' % hostname, {'Authorization': auth_header, 'Content-Type': 'application/x-www-form-urlencoded'})
             results = json.loads(conn.getresponse().read())
-            pprint.pprint(results)
+            log.debug(results)
 
         except TypeError as error:
             log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
@@ -57,6 +58,16 @@ def run():
         except Exception as error:
             log.warn('trying to extract hostname failed with error "%s"' % error)
             sys.exit()
+
+    for host in results:
+        hosts_and_ips[host['name']] = []
+        ipaddrs = []
+        for ips in host['ipv4addrs']:
+            ipaddrs.append(ips['ipv4addr'])
+        hosts_and_ips[host['name']] = ipaddrs
+
+    for host in hosts_and_ips:
+        print "%s: %s" % (host, ' '.join(hosts_and_ips[host]))
 
 def read_config(args):
     """ if a config file exists, read and parse it.
@@ -126,7 +137,8 @@ For all the checkout-app0[] in prod""")
         args.username = raw_input('Username: '  )
 
     if not args.password:
-        args.password = raw_input('Infoblox pass:'  )
+        from getpass import getpass
+        args.password = getpass()
 
     if args.debug:
         log.setLevel(logging.DEBUG)
