@@ -1,0 +1,24 @@
+### Commented entries have reasonable defaults.
+### Uncomment to edit them.
+# Source: <source package name; defaults to package name>
+Section: misc
+Priority: optional
+Homepage: https://github.com/weaselkeeper/infoquery
+Standards-Version: 3.9.2
+
+Package: infoquery
+Version: VERSION
+Maintainer: FULLNAME <EMAIL>
+Depends: python
+Architecture: all
+Copyright: LICENSE
+# Changelog: <changelog file; defaults to a generic changelog>
+Readme: README.md
+Files: infoquery.conf /etc/infoquery
+ infoquery.py /usr/bin
+
+Description: Query infoblox via api
+ Query infoblox via api
+ .
+ Query infoblix via api
+
