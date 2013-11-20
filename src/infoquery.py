@@ -40,23 +40,23 @@ def run():
     args = get_options()
     conn = _get_server(args)
 
+    # Setup auth
+    auth_header = 'Basic %s' % (':'.join([args.username, args.password]).encode('Base64').strip('\r\n'))
+
     if args.hostname:
-        # Only doing one system
         hostname = args.hostname
         try:
-            system = conn.get_item('system', hostname)
-            name = system['name']
+            conn.request('GET', '/wapi/v1.0/record:host', 'name~=%s' % hostname, {'Authorization': auth_header, 'Content-Type': 'application/x-www-form-urlencoded'})
+            results = json.loads(conn.getresponse().read())
+            pprint.pprint(results)
+
         except TypeError as error:
             log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
             sys.exit()
+
         except Exception as error:
             log.warn('trying to extract hostname failed with error "%s"' % error)
             sys.exit()
-
-        print "System %s as %s:" % (name, hostname)
-        if not args.quiet:
-            pprint.pprint(system)
-
 
 def read_config(args):
     """ if a config file exists, read and parse it.
@@ -78,7 +78,6 @@ def read_config(args):
         config = SafeConfigParser()
         config.read(args.config)
         server = config.get('server', 'host')
-        print server
     except Exception as error:
         log.warn('Something went wrong, python says "%s"' % error)
         sys.exit(1)
@@ -120,9 +119,14 @@ For all the checkout-app0[] in prod""")
     if not args.server:
         args.server = read_config(args)
 
-    if not args.hostname and not args.glob and not args.list_all\
-            and not args.all:
-        args.hostname = raw_input('hostname: ')
+    if not args.hostname and not args.glob:
+        args.hostname = raw_input('querying for hostname?: ')
+
+    if not args.username:
+        args.username = raw_input('Username: '  )
+
+    if not args.password:
+        args.password = raw_input('Infoblox pass:'  )
 
     if args.debug:
         log.setLevel(logging.DEBUG)
