@@ -78,6 +78,7 @@ def read_config(args):
         config = SafeConfigParser()
         config.read(args.config)
         server = config.get('server', 'host')
+        print server
     except Exception as error:
         log.warn('Something went wrong, python says "%s"' % error)
         sys.exit(1)
