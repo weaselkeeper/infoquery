@@ -6,11 +6,7 @@ import argparse
 from ConfigParser import SafeConfigParser
 import traceback
 import sys
-import re
-import pprint
 import logging
-import requests
-import json
 import json
 
 from httplib import HTTPSConnection
