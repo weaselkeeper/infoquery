@@ -10,13 +10,10 @@ import re
 import pprint
 import logging
 import requests
+import json
+import json
 
 from httplib import HTTPSConnection
-
-try:
-    import json
-except:
-    import simplejson as json
 
 
 """ Set some defaults """
