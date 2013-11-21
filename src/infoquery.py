@@ -36,6 +36,7 @@ def run():
     """ Main loop, called via .run method, or via __main__ section """
     hosts_and_ips = {}
     args = get_options()
+    log.debug('In run()')
     conn = _get_server(args)
 
     # Setup auth
@@ -50,11 +51,11 @@ def run():
 
         except TypeError as error:
             log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
-            sys.exit()
+            sys.exit(1)
 
         except Exception as error:
             log.warn('trying to extract hostname failed with error "%s"' % error)
-            sys.exit()
+            sys.exit(1)
 
     for host in results:
         hosts_and_ips[host['name']] = []
@@ -62,9 +63,7 @@ def run():
         for ips in host['ipv4addrs']:
             ipaddrs.append(ips['ipv4addr'])
         hosts_and_ips[host['name']] = ipaddrs
-
-    for host in hosts_and_ips:
-        print "%s: %s" % (host, ' '.join(hosts_and_ips[host]))
+    log.debug('leaving run()')
 
 def read_config(args):
     """ if a config file exists, read and parse it.
@@ -82,6 +81,9 @@ def read_config(args):
     Currently, only has one key=value pair, the default cobbler host to direct
     the query to.
     """
+
+    log.debug('entering read_config()')
+
     try:
         config = SafeConfigParser()
         config.read(args.config)
@@ -89,6 +91,7 @@ def read_config(args):
     except Exception as error:
         log.warn('Something went wrong, python says "%s"' % error)
         sys.exit(1)
+    log.debug('leaving read_config()')
     return server
 
 
@@ -141,19 +144,21 @@ For all the checkout-app0[] in prod""")
         log.setLevel(logging.DEBUG)
 
     args.usage = "usage: %prog [options]"
-
+    log.debug('leaving get_options()')
     return args
 
 
 def _get_server(args):
     """ getting the server object """
+    log.debug('entering _get_server()')
     try:
         conn = HTTPSConnection(args.server)
-        return conn
     except Exception as error:
         log.warn('Something went wrong with _get_server, python reports %s' % error)
         traceback.print_exc()
-        return None
+        sys.exit(1)
+    return conn
+    log.debug('leaving_get_server()')
 
 if __name__ == "__main__":
     run()
