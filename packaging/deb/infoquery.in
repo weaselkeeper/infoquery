@@ -20,5 +20,5 @@ Files: infoquery.conf /etc/infoquery
 Description: Query infoblox via api
  Query infoblox via api
  .
- Query infoblix via api
+ Currently only checks for ip from host queries. More is planned
 
