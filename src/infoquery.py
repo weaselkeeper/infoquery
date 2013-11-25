@@ -12,7 +12,7 @@ import json
 from httplib import HTTPSConnection
 
 
-""" Set some defaults """
+# Set some defaults
 
 CONFIGFILE = '/etc/infoquery/infoquery.conf'
 
@@ -153,8 +153,8 @@ def _get_server(args):
         log.warn('Something went wrong with _get_server, python reports %s' % error)
         traceback.print_exc()
         sys.exit(1)
-    return conn
     log.debug('leaving_get_server()')
+    return conn
 
 if __name__ == "__main__":
     run()
