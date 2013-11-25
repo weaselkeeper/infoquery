@@ -36,12 +36,15 @@ def run():
     conn = _get_server(args)
 
     # Setup auth
-    auth_header = 'Basic %s' % (':'.join([args.username, args.password]).encode('Base64').strip('\r\n'))
+    auth_header = 'Basic %s' % (':'.join([args.username,
+                                args.password]).encode('Base64').strip('\r\n'))
 
     if args.hostname:
         hostname = args.hostname
         try:
-            conn.request('GET', '/wapi/v1.0/record:host', 'name~=%s' % hostname, {'Authorization': auth_header, 'Content-Type': 'application/x-www-form-urlencoded'})
+            conn.request('GET', '/wapi/v1.0/record:host',
+                        'name~=%s' % hostname, {'Authorization': auth_header,
+                        'Content-Type': 'application/x-www-form-urlencoded'})
             results = json.loads(conn.getresponse().read())
             log.debug(results)
 
@@ -50,7 +53,7 @@ def run():
             sys.exit(1)
 
         except Exception as error:
-            log.warn('trying to extract hostname failed with error "%s"' % error)
+            log.warn('trying to extract data failed with error "%s"' % error)
             sys.exit(1)
 
     for host in results:
@@ -109,9 +112,6 @@ Example, ./infoquery.py  -g 'checkout-app0?.*prod.*'
 For all the checkout-app0[] in prod""")
     parser.add_argument("-q", "--quiet", action="store_true",
                         help="just tell me what systems match -g or hostname")
-    parser.add_argument("-a", "--all", action="store_true",
-                        help="Do for all systems infoblox knows about, use with \
--q, or get flooded with lots of text")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Extra info about stuff")
     parser.add_argument("-d", "--debug", action="store_true",
@@ -150,7 +150,7 @@ def _get_server(args):
     try:
         conn = HTTPSConnection(args.server)
     except Exception as error:
-        log.warn('Something went wrong with _get_server, python reports %s' % error)
+        log.warn('_get_server failed, python reports %s' % error)
         traceback.print_exc()
         sys.exit(1)
     log.debug('leaving_get_server()')
