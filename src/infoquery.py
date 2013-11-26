@@ -106,12 +106,6 @@ def get_options():
                         help="Hostname to query for.")
     parser.add_argument("-s", "--server", action="store",
                         dest="server", help="Infoblox server.")
-    parser.add_argument("-g", "--glob", action="store",
-                        help="""restrict actions to hosts that match regex
-Example, ./infoquery.py  -g 'checkout-app0?.*prod.*'
-For all the checkout-app0[] in prod""")
-    parser.add_argument("-q", "--quiet", action="store_true",
-                        help="just tell me what systems match -g or hostname")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Extra info about stuff")
     parser.add_argument("-d", "--debug", action="store_true",
@@ -157,4 +151,5 @@ def _get_server(args):
     return conn
 
 if __name__ == "__main__":
-    run()
+    udo  /etc/init.d/hyperic-hqee-agent status
+    un()
