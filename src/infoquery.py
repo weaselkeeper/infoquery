@@ -8,6 +8,7 @@ import traceback
 import sys
 import logging
 import json
+import getpass
 
 from httplib import HTTPSConnection
 
@@ -124,11 +125,11 @@ def get_options():
         args.hostname = raw_input('querying for hostname?: ')
 
     if not args.username:
-        args.username = raw_input('Username: '  )
+        args.username = getpass.getuser()
 
     if not args.password:
-        from getpass import getpass
-        args.password = getpass()
+        print 'running as user %s' % args.username
+        args.password = getpass.getpass()
 
     if args.debug:
         log.setLevel(logging.DEBUG)
