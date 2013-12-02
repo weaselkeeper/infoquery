@@ -151,5 +151,4 @@ def _get_server(args):
     return conn
 
 if __name__ == "__main__":
-    udo  /etc/init.d/hyperic-hqee-agent status
-    un()
+    run()
