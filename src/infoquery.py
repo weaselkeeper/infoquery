@@ -40,6 +40,8 @@ def run():
     auth_header = 'Basic %s' % (':'.join([args.username,
                                 args.password]).encode('Base64').strip('\r\n'))
 
+    log.debug('authenticating with token %s' % auth_header)
+
     if args.hostname:
         hostname = args.hostname
         try:
@@ -47,7 +49,10 @@ def run():
                         'name~=%s' % hostname, {'Authorization': auth_header,
                         'Content-Type': 'application/x-www-form-urlencoded'})
             results = json.loads(conn.getresponse().read())
-            log.debug(results)
+            log.debug('connection returns %s' % results)
+            if not len(results):
+                log.warn('Zero results, host probably does not exist in infoblox') 
+                sys.exit(1)
 
         except TypeError as error:
             log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
@@ -58,6 +63,7 @@ def run():
             sys.exit(1)
 
     for host in results:
+        log.debug('querying for host %s' % host)
         hosts_and_ips[host['name']] = []
         ipaddrs = []
         for ips in host['ipv4addrs']:
