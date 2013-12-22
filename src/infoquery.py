@@ -13,6 +13,12 @@ import getpass
 from httplib import HTTPSConnection
 
 
+try:
+    from pymongo import Connection
+except ImportError as ERROR:
+    print 'Failed import of pymmongo, system says %s' % ERROR
+    sys.exit(1)
+
 # Set some defaults
 
 CONFIGFILE = '/etc/infoquery/infoquery.conf'
