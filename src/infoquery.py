@@ -35,6 +35,7 @@ log.setLevel(global_log_level)
 log.addHandler(default_log_handler)
 log.debug("Starting logging")
 
+
 def run():
     """ Main loop, called via .run method, or via __main__ section """
     hosts_and_ips = {}
@@ -52,12 +53,12 @@ def run():
         hostname = args.hostname
         try:
             conn.request('GET', '/wapi/v1.0/record:host',
-                        'name~=%s' % hostname, {'Authorization': auth_header,
-                        'Content-Type': 'application/x-www-form-urlencoded'})
+                         'name~=%s' % hostname, {'Authorization': auth_header,
+                         'Content-Type': 'application/x-www-form-urlencoded'})
             results = json.loads(conn.getresponse().read())
             log.debug('connection returns %s' % results)
             if not len(results):
-                log.warn('Zero results, host probably does not exist in infoblox') 
+                log.warn('Zero results, host probably not in infoblox')
                 sys.exit(1)
 
         except TypeError as error:
@@ -74,8 +75,9 @@ def run():
         ipaddrs = []
         for ips in host['ipv4addrs']:
             ipaddrs.append(ips['ipv4addr'])
-        hosts_and_ips[host['name']] = ipaddrs
+        hosts_and_ips[host['name']] = ips['ipv4addr']
     log.debug('leaving run()')
+    return hosts_and_ips
 
 def read_config(args):
     """ if a config file exists, read and parse it.
@@ -164,4 +166,6 @@ def _get_server(args):
     return conn
 
 if __name__ == "__main__":
-    run()
+    results = run()
+    for host in results.keys():
+        print ('Host %s has IP %s' % (host, results[host]))
