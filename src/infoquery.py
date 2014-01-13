@@ -118,7 +118,7 @@ def get_options():
     parser.add_argument('-p', '--password', action='store', help='password')
 
     parser.add_argument("-n", "--hostname", action="store",
-                        help="Hostname to query for.")
+                        help="Full or partial Hostname to query for.")
     parser.add_argument("-s", "--server", action="store",
                         dest="server", help="Infoblox server.")
     parser.add_argument("-v", "--verbose", action="store_true",
