@@ -55,9 +55,9 @@ def run():
             conn.request('GET', '/wapi/v1.0/record:host',
                          'name~=%s' % hostname, {'Authorization': auth_header,
                          'Content-Type': 'application/x-www-form-urlencoded'})
-            results = json.loads(conn.getresponse().read())
-            log.debug('connection returns %s' % results)
-            if not len(results):
+            _results = json.loads(conn.getresponse().read())
+            log.debug('connection returns %s' % _results)
+            if not len(_results):
                 log.warn('Zero results, host probably not in infoblox')
                 sys.exit(1)
 
@@ -69,13 +69,13 @@ def run():
             log.warn('trying to extract data failed with error "%s"' % error)
             sys.exit(1)
 
-    for host in results:
-        log.debug('querying for host %s' % host)
-        hosts_and_ips[host['name']] = []
+    for _host in _results:
+        log.debug('querying for host %s' % _host)
+        hosts_and_ips[_host['name']] = []
         ipaddrs = []
-        for ips in host['ipv4addrs']:
+        for ips in _host['ipv4addrs']:
             ipaddrs.append(ips['ipv4addr'])
-        hosts_and_ips[host['name']] = ips['ipv4addr']
+        hosts_and_ips[_host['name']] = ips['ipv4addr']
     log.debug('leaving run()')
     return hosts_and_ips
 
