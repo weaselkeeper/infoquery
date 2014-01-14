@@ -60,7 +60,9 @@ def run():
             if not len(_results):
                 log.warn('Zero results, host probably not in infoblox')
                 sys.exit(1)
-
+            if 'text' in _results: # An error has occured
+                log.warn('Sorry, infoblox says %s: ' % _results['text'])
+                sys.exit(1)
         except TypeError as error:
             log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
             sys.exit(1)
@@ -77,6 +79,7 @@ def run():
             ipaddrs.append(ips['ipv4addr'])
         hosts_and_ips[_host['name']] = ips['ipv4addr']
     log.debug('leaving run()')
+    log.debug(hosts_and_ips)
     return hosts_and_ips
 
 def read_config(args):
