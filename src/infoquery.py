@@ -60,7 +60,7 @@ def run():
             if not len(_results):
                 log.warn('Zero results, host probably not in infoblox')
                 sys.exit(1)
-            if 'text' in _results: # An error has occured
+            if 'text' in _results:  # An error has occured
                 log.warn('Sorry, infoblox says %s: ' % _results['text'])
                 sys.exit(1)
         except TypeError as error:
@@ -81,6 +81,7 @@ def run():
     log.debug('leaving run()')
     log.debug(hosts_and_ips)
     return hosts_and_ips
+
 
 def read_config(args):
     """ if a config file exists, read and parse it.
