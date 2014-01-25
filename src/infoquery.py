@@ -47,7 +47,7 @@ def run():
     auth_header = 'Basic %s' % (':'.join([args.username,
                                 args.password]).encode('Base64').strip('\r\n'))
 
-    log.debug('authenticating with token %s' % auth_header)
+    log.debug('authenticating with token %s', auth_header)
 
     if args.hostname:
         hostname = args.hostname
@@ -56,23 +56,23 @@ def run():
                          'name~=%s' % hostname, {'Authorization': auth_header,
                          'Content-Type': 'application/x-www-form-urlencoded'})
             _results = json.loads(conn.getresponse().read())
-            log.debug('connection returns %s' % _results)
+            log.debug('connection returns %s', _results)
             if not len(_results):
                 log.warn('Zero results, host probably not in infoblox')
                 sys.exit(1)
             if 'text' in _results:  # An error has occured
-                log.warn('Sorry, infoblox says %s: ' % _results['text'])
+                log.warn('Sorry, infoblox says %s: ', _results['text'])
                 sys.exit(1)
         except TypeError as error:
-            log.warn('Couldn\'t fetch %s due to "%s"' % (hostname, error))
+            log.warn('Couldn\'t fetch %s due to "%s"', hostname, error)
             sys.exit(1)
 
         except Exception as error:
-            log.warn('trying to extract data failed with error "%s"' % error)
+            log.warn('trying to extract data failed with error "%s"', error)
             sys.exit(1)
 
     for _host in _results:
-        log.debug('querying for host %s' % _host)
+        log.debug('querying for host %s', _host)
         hosts_and_ips[_host['name']] = []
         ipaddrs = []
         for ips in _host['ipv4addrs']:
@@ -107,7 +107,7 @@ def read_config(args):
         config.read(args.config)
         server = config.get('server', 'host')
     except Exception as error:
-        log.warn('Something went wrong, python says "%s"' % error)
+        log.warn('Something went wrong, python says "%s"', error)
         sys.exit(1)
     log.debug('leaving read_config()')
     return server
@@ -163,7 +163,7 @@ def _get_server(args):
     try:
         conn = HTTPSConnection(args.server)
     except Exception as error:
-        log.warn('_get_server failed, python reports %s' % error)
+        log.warn('_get_server failed, python reports %s', error)
         traceback.print_exc()
         sys.exit(1)
     log.debug('leaving_get_server()')
