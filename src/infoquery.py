@@ -172,4 +172,4 @@ def _get_server(args):
 if __name__ == "__main__":
     results = run()
     for host in results.keys():
-        print ('Host %s has IP %s' % (host, results[host]))
+        print 'Host %s has IP %s' % (host, results[host])
