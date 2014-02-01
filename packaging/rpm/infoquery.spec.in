@@ -12,6 +12,7 @@ BuildArch:      noarch
 Requires:       python
 Requires:       python-requests
 Requires:       python-simplejson
+Requires:       pymongo
 
 %description
 Query infoblox via api calls
