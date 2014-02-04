@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 """
- Queries infoblox for information on hosts. Auth required"""
+ Queries infoblox for information on hosts. Auth required
+ Example:
+    infoquery.py -u username -n testfoo* -s infoblox.server.tld
+    will query infoblox.server.tld as user username for any hosts
+    testfoo* (passwd will be prompted for
+ """
 
 import argparse
 from ConfigParser import SafeConfigParser
