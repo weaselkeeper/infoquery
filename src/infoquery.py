@@ -167,7 +167,9 @@ def _get_server(args):
     log.debug('entering _get_server()')
     try:
         conn = HTTPSConnection(args.server)
+        log.debug('trying to connect to %s', args.server)
     except Exception as error:
+        log.debug('Failed to connect to %s', args.server)
         log.warn('_get_server failed, python reports %s', error)
         traceback.print_exc()
         sys.exit(1)
