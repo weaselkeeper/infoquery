@@ -54,7 +54,8 @@ def run():
             conn.request('GET', '/wapi/v1.0/record:host',
                          'name~=%s' % hostname, {'Authorization': auth_header,
                          'Content-Type': 'application/x-www-form-urlencoded'})
-            _results = json.loads(conn.getresponse().read())
+            _raw_results = conn.getresponse().read()
+            _results = json.loads(_raw_results)
             log.debug('connection returns %s', _results)
             if not len(_results):
                 log.warn('Zero results, host probably not in infoblox')
