@@ -14,6 +14,8 @@ import sys
 import logging
 import json
 import getpass
+import requests
+
 
 from httplib import HTTPSConnection
 
@@ -39,6 +41,9 @@ def run():
     """ Main loop, called via .run method, or via __main__ section """
     hosts_and_ips = {}
     args = get_options()
+    if args.network:
+        get_networks(args)
+        sys.exit(0)
     log.debug('In run()')
     conn = _get_server(args)
 
@@ -113,6 +118,16 @@ def read_config(args):
     return server
 
 
+def get_networks(args):
+    session = requests.Session()
+    user, passwd = args.username, args.password
+    session.auth = (user, passwd)
+    session.verify = False
+    hosturl = 'https://' + args.server + '/wapi/v1.0/'
+    result = session.get(hosturl + 'network')
+    print result.content
+
+
 def get_options():
     """ command-line options """
     parser = argparse.ArgumentParser(description='Pass cli options to script')
@@ -130,6 +145,8 @@ def get_options():
     parser.add_argument("-d", "--debug", action="store_true",
                         help="Set logging level to debug")
     parser.add_argument("-c", "--config", action="store", help="config file")
+    parser.add_argument("-N", "--network", action="store_true",
+                        help="Get all networks")
 
     args = parser.parse_args()
 
