@@ -17,6 +17,9 @@ Host ndbmail0248.prod.iad1.cmates.com has IP 10.12.113.48
 Basically, anything that has mail as part of it's fqdn.  Does not currently
 understand file globbing or RE
 
+Also, if infoblox doesn't create a host object as the result of dhcp lease, it
+won't show up in this query.
+
 
 ├── config
 │   └── infoquery.conf
