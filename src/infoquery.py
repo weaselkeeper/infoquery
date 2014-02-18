@@ -9,21 +9,14 @@
 
 import argparse
 from ConfigParser import SafeConfigParser
-import traceback
 import sys
 import logging
-import json
 import getpass
 import requests
-
-
-from httplib import HTTPSConnection
-
 
 # Set some defaults
 
 CONFIGFILE = '/etc/infoquery/infoquery.conf'
-
 
 global_log_level = logging.WARN
 default_log_format = logging.Formatter("%(asctime)s - %(levelname)s - \
@@ -37,21 +30,13 @@ log.addHandler(default_log_handler)
 log.debug("Starting logging")
 
 
-def gethost(args):
-    session = requests.Session()
-    user, passwd = args.username, args.password
-    session.auth = (user, passwd)
-    session.verify = False
-    hosturl = 'https://' + args.server + '/wapi/v1.0/'
-    getquery = hosturl + "record:host?name~=" + args.hostname
-    result = session.get(getquery)
-    print result.content
-
-
 def run():
     """ Main loop, called via .run method, or via __main__ section """
     hosts_and_ips = {}
     args = get_options()
+    if args.network:
+        get_networks(args)
+        sys.exit(0)
     log.debug('In run()')
 
     hostname = args.hostname
@@ -109,12 +94,13 @@ def read_config(args):
 
 
 def get_networks(args):
+    """ Return all the networks infoblox knows about """
     session = requests.Session()
     user, passwd = args.username, args.password
     session.auth = (user, passwd)
     session.verify = False
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
-    result = session.get(hosturl + 'record:host' + '?name~=jim')
+    result = session.get(hosturl + 'network')
     print result.content
 
 
@@ -163,20 +149,6 @@ def get_options():
     log.debug('leaving get_options()')
     return args
 
-
-def _get_server(args):
-    """ getting the server object """
-    log.debug('entering _get_server()')
-    try:
-        conn = HTTPSConnection(args.server)
-        log.debug('trying to connect to %s', args.server)
-    except Exception as error:
-        log.debug('Failed to connect to %s', args.server)
-        log.warn('_get_server failed, python reports %s', error)
-        traceback.print_exc()
-        sys.exit(1)
-    log.debug('leaving_get_server()')
-    return conn
 
 if __name__ == "__main__":
     results = run()
