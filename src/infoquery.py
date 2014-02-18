@@ -132,7 +132,7 @@ def get_options():
     if not args.server:
         args.server = read_config(args)
 
-    if not args.hostname:
+    if not args.hostname and not args.network:
         args.hostname = raw_input('querying for hostname?: ')
 
     if not args.username:
