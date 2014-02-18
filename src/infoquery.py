@@ -37,46 +37,36 @@ log.addHandler(default_log_handler)
 log.debug("Starting logging")
 
 
+def gethost(args):
+    session = requests.Session()
+    user, passwd = args.username, args.password
+    session.auth = (user, passwd)
+    session.verify = False
+    hosturl = 'https://' + args.server + '/wapi/v1.0/'
+    getquery = hosturl + "record:host?name~=" + args.hostname
+    result = session.get(getquery)
+    print result.content
+
+
 def run():
     """ Main loop, called via .run method, or via __main__ section """
     hosts_and_ips = {}
     args = get_options()
-    if args.network:
-        get_networks(args)
-        sys.exit(0)
     log.debug('In run()')
-    conn = _get_server(args)
 
-    # Setup auth
-    auth_header = 'Basic %s' % (':'.join([args.username,
-                                args.password]).encode('Base64').strip('\r\n'))
+    hostname = args.hostname
+    session = requests.Session()
+    user, passwd = args.username, args.password
+    session.auth = (user, passwd)
+    session.verify = False
 
-    log.debug('authenticating with token %s', auth_header)
+    hosturl = 'https://' + args.server + '/wapi/v1.0/'
+    query = hosturl + "record:host?name~=" + hostname
+    log.debug('trying with %s', query)
+    query_results = session.get(query)
+    results = query_results.json()
 
-    if args.hostname:
-        hostname = args.hostname
-        try:
-            conn.request('GET', '/wapi/v1.0/record:host',
-                         'name~=%s' % hostname, {'Authorization': auth_header,
-                         'Content-Type': 'application/x-www-form-urlencoded'})
-            _raw_results = conn.getresponse().read()
-            _results = json.loads(_raw_results)
-            log.debug('connection returns %s', _results)
-            if not len(_results):
-                log.warn('Zero results, host probably not in infoblox')
-                sys.exit(1)
-            if 'text' in _results:  # An error has occured
-                log.warn('Sorry, infoblox says %s: ', _results['text'])
-                sys.exit(1)
-        except TypeError as error:
-            log.warn('Couldn\'t fetch %s due to "%s"', hostname, error)
-            sys.exit(1)
-
-        except Exception as error:
-            log.warn('trying to extract data failed with error "%s"', error)
-            sys.exit(1)
-
-    for _host in _results:
+    for _host in results:
         log.debug('querying for host %s', _host)
         hosts_and_ips[_host['name']] = []
         ipaddrs = []
@@ -124,7 +114,7 @@ def get_networks(args):
     session.auth = (user, passwd)
     session.verify = False
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
-    result = session.get(hosturl + 'network')
+    result = session.get(hosturl + 'record:host' + '?name~=jim')
     print result.content
 
 
