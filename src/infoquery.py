@@ -49,9 +49,9 @@ def run():
     query = hosturl + "record:host?name~=" + hostname
     log.debug('trying with %s', query)
     query_results = session.get(query)
-    results = query_results.json()
+    _results = query_results.json()
 
-    for _host in results:
+    for _host in _results:
         log.debug('querying for host %s', _host)
         hosts_and_ips[_host['name']] = []
         ipaddrs = []
