@@ -60,7 +60,8 @@ def run():
         hosts_and_ips[_host['name']] = ips['ipv4addr']
     log.debug('leaving run()')
     log.debug(hosts_and_ips)
-    return hosts_and_ips
+    return display_results(hosts_and_ips)
+
 
 
 def read_config(args):
@@ -102,6 +103,12 @@ def get_networks(args):
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     result = session.get(hosturl + 'network')
     print result.content
+
+
+def display_results(_results):
+    for host in _results.keys():
+        print 'Host %s has IP %s' % (host, _results[host])
+    return
 
 
 def get_options():
@@ -151,6 +158,4 @@ def get_options():
 
 
 if __name__ == "__main__":
-    results = run()
-    for host in results.keys():
-        print 'Host %s has IP %s' % (host, results[host])
+    sys.exit(run())
