@@ -106,6 +106,7 @@ def get_networks(args):
 
 
 def display_results(_results):
+    """ show the results """
     for host in _results.keys():
         print 'Host %s has IP %s' % (host, _results[host])
     return
