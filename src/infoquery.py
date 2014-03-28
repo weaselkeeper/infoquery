@@ -93,7 +93,6 @@ def run():
     return display_results(hosts_and_ips)
 
 
-
 def read_config(args):
     """ if a config file exists, read and parse it.
     Override with the get_options function, and any relevant environment
