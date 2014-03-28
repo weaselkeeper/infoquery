@@ -70,19 +70,25 @@ log.debug("Starting logging")
 
 def run():
     """ Main loop, called via .run method, or via __main__ section """
-    hosts_and_ips = {}
     args = get_options()
     if args.network:
         get_networks(args)
         sys.exit(0)
     log.debug('In run()')
 
-    hostname = args.hostname
     session = requests.Session()
     user, passwd = args.username, args.password
     session.auth = (user, passwd)
     session.verify = False
+    results = get_host(session, args)
+    return results
 
+
+def get_host(session, args):
+    """ Return any info available on requested host """
+
+    hosts_and_ips = {}
+    hostname = args.hostname
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     query = hosturl + "record:host?name~=" + hostname
     log.debug('trying with %s', query)
@@ -96,7 +102,7 @@ def run():
         for ips in _host['ipv4addrs']:
             ipaddrs.append(ips['ipv4addr'])
         hosts_and_ips[_host['name']] = ips['ipv4addr']
-    log.debug('leaving run()')
+    log.debug('leaving get_host')
     log.debug(hosts_and_ips)
     return display_results(hosts_and_ips)
 
@@ -129,6 +135,7 @@ def read_config(args):
         sys.exit(1)
     log.debug('leaving read_config()')
     return server
+
 
 
 def get_networks(args):
