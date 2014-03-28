@@ -71,16 +71,16 @@ log.debug("Starting logging")
 def run():
     """ Main loop, called via .run method, or via __main__ section """
     args = get_options()
-    if args.network:
-        get_networks(args)
-        sys.exit(0)
     log.debug('In run()')
 
     session = requests.Session()
     user, passwd = args.username, args.password
     session.auth = (user, passwd)
     session.verify = False
-    results = get_host(session, args)
+    if args.network:
+        results = get_networks(session, args)
+    else:
+        results = get_host(session, args)
     return results
 
 
@@ -138,15 +138,11 @@ def read_config(args):
 
 
 
-def get_networks(args):
+def get_networks(session, args):
     """ Return all the networks infoblox knows about """
-    session = requests.Session()
-    user, passwd = args.username, args.password
-    session.auth = (user, passwd)
-    session.verify = False
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     result = session.get(hosturl + 'network')
-    print result.content
+    return result.content
 
 
 def display_results(_results):
