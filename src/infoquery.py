@@ -42,8 +42,16 @@ from ConfigParser import SafeConfigParser
 import sys
 import logging
 import getpass
-import requests
+try:
+    import requests
+except ImportError:
+    print """
 
+    please ensure availability of python-requests module
+    Thank you.
+
+    """
+    sys.exit(1)
 # Set some defaults
 
 CONFIGFILE = '/etc/infoquery/infoquery.conf'
