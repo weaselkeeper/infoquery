@@ -90,7 +90,7 @@ def run():
 def get_arecord(session, args):
     """ Return any info available on requested A record """
 
-    hostname = args.hostname
+    hostname = args.arecord
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     query = hosturl + "record:a?name~=" + hostname
     log.debug('trying with %s', query)
@@ -194,8 +194,8 @@ def get_options():
     parser.add_argument("-c", "--config", action="store", help="config file")
     parser.add_argument("-N", "--network", action="store_true",
                         help="Get all networks")
-    parser.add_argument("-a", "--arecord", action="store_true",
-                        help="Get a record only, not host")
+    parser.add_argument("-a", "--arecord", action="store",
+                        help="Get A record for ARECORD")
 
     args = parser.parse_args()
 
@@ -205,7 +205,7 @@ def get_options():
     if not args.server:
         args.server = read_config(args)
 
-    if not args.hostname and not args.network:
+    if not args.hostname and not args.network and not args.arecord:
         args.hostname = raw_input('querying for hostname?: ')
 
     if not args.username:
