@@ -85,7 +85,8 @@ def run():
 
 
 def get_host(session, args):
-    """ Return any info available on requested host """
+    """ Return any info available on requested host. Note, these
+    results include only static hosts, dhcp assigned hosts are not included """
 
     hosts_and_ips = {}
     hostname = args.hostname
