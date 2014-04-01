@@ -79,9 +79,31 @@ def run():
     session.verify = False
     if args.network:
         results = get_networks(session, args)
+
+    if args.arecord:
+            results = get_arecord(session, args)
     else:
         results = get_host(session, args)
     return results
+
+
+def get_arecord(session, args):
+    """ Return any info available on requested A record """
+
+    hostname = args.hostname
+    hosturl = 'https://' + args.server + '/wapi/v1.0/'
+    query = hosturl + "record:a?name~=" + hostname
+    log.debug('trying with %s', query)
+    query_results = session.get(query)
+    _results = query_results.json()
+
+    ipv4 = {}
+    for _host in _results:
+        log.debug('querying for host %s', _host)
+        ipv4[_host['name']] = _host['ipv4addr']
+    log.debug('leaving get_host')
+    log.debug(ipv4)
+    return display_results(ipv4)
 
 
 def get_host(session, args):
@@ -172,6 +194,8 @@ def get_options():
     parser.add_argument("-c", "--config", action="store", help="config file")
     parser.add_argument("-N", "--network", action="store_true",
                         help="Get all networks")
+    parser.add_argument("-a", "--arecord", action="store_true",
+                        help="Get a record only, not host")
 
     args = parser.parse_args()
 
