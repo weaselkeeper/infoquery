@@ -81,7 +81,7 @@ def run():
         results = get_networks(session, args)
 
     if args.arecord:
-            results = get_arecord(session, args)
+        results = get_arecord(session, args)
     else:
         results = get_host(session, args)
     return results
