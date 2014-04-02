@@ -73,10 +73,7 @@ def run():
     args = get_options()
     log.debug('In run()')
 
-    session = requests.Session()
-    user, passwd = args.username, args.password
-    session.auth = (user, passwd)
-    session.verify = False
+    session = get_session(args)
     if args.network:
         results = get_networks(session, args)
 
@@ -87,8 +84,19 @@ def run():
     return results
 
 
+def get_session(args):
+    """ Build a session and return, so we can make multiple queries if asked
+    """
+    log.debug('Getting session')
+    _session = requests.Session()
+    user, passwd = args.username, args.password
+    _session.auth = (user, passwd)
+    _session.verify = False
+    return _session
+
+
 def get_arecord(session, args):
-    """ Return any info available on requested A record """
+    """ Return any info available on requested A record(s) """
 
     hostname = args.arecord
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
@@ -107,7 +115,7 @@ def get_arecord(session, args):
 
 
 def get_host(session, args):
-    """ Return any info available on requested host. Note, these
+    """ Return any info available on requested host(s). Note, these
     results include only static hosts, dhcp assigned hosts are not included """
 
     hosts_and_ips = {}
