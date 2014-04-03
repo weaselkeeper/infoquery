@@ -81,6 +81,7 @@ def run():
         results = get_arecord(session, args)
     else:
         results = get_host(session, args)
+    log.debug('leaving run()')
     return results
 
 
@@ -92,12 +93,13 @@ def get_session(args):
     user, passwd = args.username, args.password
     _session.auth = (user, passwd)
     _session.verify = False
+    log.debug('leaving get_session')
     return _session
 
 
 def get_arecord(session, args):
     """ Return any info available on requested A record(s) """
-
+    log.debug('entering get_arecord')
     hostname = args.arecord
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     query = hosturl + "record:a?name~=" + hostname
@@ -117,7 +119,7 @@ def get_arecord(session, args):
 def get_host(session, args):
     """ Return any info available on requested host(s). Note, these
     results include only static hosts, dhcp assigned hosts are not included """
-
+    log.debug('entering get_host')
     hosts_and_ips = {}
     hostname = args.hostname
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
@@ -168,18 +170,21 @@ def read_config(args):
     return server
 
 
-
 def get_networks(session, args):
     """ Return all the networks infoblox knows about """
+    log.debug('entering get_networks')
     hosturl = 'https://' + args.server + '/wapi/v1.0/'
     result = session.get(hosturl + 'network')
+    log.debug('leaving get_networks')
     return result.content
 
 
 def display_results(_results):
     """ show the results """
+    log.debug('entering display_resultes')
     for host in _results.keys():
         print 'Host %s has IP %s' % (host, _results[host])
+    log.debug('leaving display_results')
     return
 
 
