@@ -1,7 +1,10 @@
 infoquery
 =========
 
-Query infoblox appliance via api
+Query infoblox appliance via api. 
+
+NOTE: I no longer have access to infoblox devices, (new job) and thus, this code 
+is going to lose interest for me.  If/when I have access to an infoblox device again, I may well wish to contingue this project, but until then, it's going to fall off my work list. 
 
 Currently, supports hostname query, does a greedy match against -n option
 i.e.
