@@ -118,7 +118,7 @@ def get_arecord(session, args):
 
 def get_host(session, args):
     """ Return any info available on requested host(s). Note, these
-    results include only static hosts, dhcp assigned hosts are not included 
+    results include only static hosts, dhcp assigned hosts are not included
     Also, this is IPV4 only for now"""
     log.debug('entering get_host')
     hosts_and_ips = {}
