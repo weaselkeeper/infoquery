@@ -133,6 +133,7 @@ def get_host(session, args):
         log.debug('querying for host %s', _host)
         hosts_and_ips[_host['name']] = []
         ipaddrs = []
+        ips = None
         for ips in _host['ipv4addrs']:
             ipaddrs.append(ips['ipv4addr'])
         hosts_and_ips[_host['name']] = ips['ipv4addr']
