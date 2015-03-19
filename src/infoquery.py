@@ -161,13 +161,9 @@ def read_config(args):
 
     log.debug('entering read_config()')
 
-    try:
-        config = SafeConfigParser()
-        config.read(args.config)
-        server = config.get('server', 'host')
-    except Exception as error:
-        log.warn('Something went wrong, python says "%s"', error)
-        sys.exit(1)
+    config = SafeConfigParser()
+    config.read(args.config)
+    server = config.get('server', 'host')
     log.debug('leaving read_config()')
     return server
 
