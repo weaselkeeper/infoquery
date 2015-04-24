@@ -24,6 +24,31 @@ Also, if infoblox doesn't create a host object as the result of dhcp lease, it
 won't show up in this query.
 
 
+usage: infoquery.py [-h] [-u USERNAME] [-p PASSWORD] [-n HOSTNAME] [-s SERVER]
+                    [-v] [-d] [-c CONFIG] [-N] [-a ARECORD]
+
+Pass cli options to script
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u USERNAME, --username USERNAME
+                        username
+  -p PASSWORD, --password PASSWORD
+                        password
+  -n HOSTNAME, --hostname HOSTNAME
+                        Full or partial Hostname to query for.
+  -s SERVER, --server SERVER
+                        Infoblox server.
+  -v, --verbose         Extra info about stuff
+  -d, --debug           Set logging level to debug
+  -c CONFIG, --config CONFIG
+                        config file
+  -N, --network         Get all networks
+  -a ARECORD, --arecord ARECORD
+                        Get A record for ARECORD
+
+
+
 ├── config
 │   └── infoquery.conf
 ├── LICENSE
